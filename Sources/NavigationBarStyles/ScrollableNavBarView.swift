@@ -10,7 +10,6 @@ import SwiftUI
 
 internal struct ScrollableNavBarView: View {
     @Binding private var selection: Int
-    @State private var switchAppeared: Bool = false
 
     @EnvironmentObject private var dataStore: DataStore
 
@@ -21,7 +20,8 @@ internal struct ScrollableNavBarView: View {
     var body: some View {
         ScrollViewReader { value in
             ScrollView(.horizontal, showsIndicators: false) {
-                VStack {
+                ZStack {
+                    IndicatorScrollableBarView(selection: $selection)
                     HStack(spacing: style.tabItemSpacing) {
                         if dataStore.itemsCount > 0 {
                             ForEach(0..<dataStore.itemsCount, id: \.self) { idx in
@@ -29,36 +29,17 @@ internal struct ScrollableNavBarView: View {
                             }
                         }
                     }
-                    IndicatorScrollableBarView(selection: $selection)
                 }
                 .frame(height: self.style.tabItemHeight)
+                .padding(.leading, 8)
+                .padding(.trailing, 8)
             }
             .padding(self.style.padding)
-            .onChange(of: switchAppeared) { _ in
-                // This is necessary because anchor: .center is not working correctly
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    var remainingItemsWidth = dataStore.items[selection]?.itemWidth ?? 0 / 2
-                    let items = dataStore.items.filter { index, _ in
-                        index > selection
-                    }
-                    remainingItemsWidth += items.map({return $0.value.itemWidth ?? 0}).reduce(0, +)
-                    remainingItemsWidth += CGFloat(dataStore.items.count-1 - selection)*style.tabItemSpacing
-                    let centerSel = remainingItemsWidth > settings.width/2
-                    if centerSel {
-                        value.scrollTo(selection, anchor: .center)
-                    } else {
-                        value.scrollTo(dataStore.items.count-1)
-                    }
-                }
-            }
             .onChange(of: self.selection) { newSelection in
                 withAnimation {
                     value.scrollTo(newSelection, anchor: .center)
                 }
             }
-        }
-        .onAppear {
-            switchAppeared = !switchAppeared
         }
     }
 
@@ -78,11 +59,11 @@ internal struct IndicatorScrollableBarView: View {
     }
 
     var body: some View {
-        Rectangle()
+        Capsule()
             .fill(style.indicatorBarColor)
             .animation(.default, value: appeared)
-            .frame(width: selectedItemWidth, height: style.indicatorBarHeight)
-            .position(x: position)
+            .frame(width: selectedItemWidth + 16, height: style.indicatorBarHeight)
+            .position(x: position, y: style.tabItemHeight / 2)
             .onAppear {
                 appeared = true
             }
