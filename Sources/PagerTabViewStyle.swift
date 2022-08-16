@@ -42,7 +42,7 @@ public enum PagerStyle {
 
     case scrollableBarButton(indicatorBarHeight: CGFloat = 2, indicatorBarColor: Color = .blue,
                              padding: EdgeInsets = EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10),
-                             tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 60, placedInToolbar: Bool = false)
+                             tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 60, placedInToolbar: Bool = false, navBarBackground: Color = .clear)
 
     case custom(tabItemSpacing: CGFloat, tabItemHeight: CGFloat, placedInToolbar: Bool, indicator: () -> AnyView, background: () -> AnyView)
 
@@ -52,7 +52,7 @@ public enum PagerStyle {
             return spacing
         case .barButton(_, _, let spacing, _, _):
             return spacing
-        case .scrollableBarButton(_, _, _, let spacing, _, _):
+        case .scrollableBarButton(_, _, _, let spacing, _, _, _):
             return spacing
         case .custom(let spacing, _, _, _, _):
             return spacing
@@ -67,7 +67,7 @@ public enum PagerStyle {
             return color
         case .barButton(_, let color, _, _, _):
             return color
-        case .scrollableBarButton(_, let color, _, _, _, _):
+        case .scrollableBarButton(_, let color, _, _, _, _, _):
             return color
         case .custom:
             /// - Note: Clear color will hide the indicator and it's hard find the cause of this for the user
@@ -83,7 +83,7 @@ public enum PagerStyle {
             return height
         case .barButton(let height, _, _, _, _):
             return height
-        case .scrollableBarButton(let height, _, _, _, _, _):
+        case .scrollableBarButton(let height, _, _, _, _, _, _):
             return height
         default:
             return 2
@@ -94,7 +94,7 @@ public enum PagerStyle {
         switch self {
         case .barButton(_, _, _, let height, _):
             return height
-        case .scrollableBarButton(_, _, _, _, let height, _):
+        case .scrollableBarButton(_, _, _, _, let height, _, _):
             return height
         case .custom(_, let height, _, _, _):
             return height
@@ -116,7 +116,7 @@ public enum PagerStyle {
         switch self {
         case .segmentedControl(_, let padding, _):
             return padding
-        case .scrollableBarButton(_, _, let padding, _, _, _):
+        case .scrollableBarButton(_, _, let padding, _, _, _, _):
             return padding
         default:
             return EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10)
@@ -131,10 +131,19 @@ public enum PagerStyle {
             return placedInToolbar
         case .barButton( _, _, _, _, let placedInToolbar):
             return placedInToolbar
-        case .scrollableBarButton( _, _, _, _, _, let placedInToolbar):
+        case .scrollableBarButton( _, _, _, _, _, let placedInToolbar, _):
             return placedInToolbar
         case .custom( _, _, let placedInToolbar, _, _):
             return placedInToolbar
+        }
+    }
+    
+    internal var navBarBackground: Color {
+        switch self {
+        case .scrollableBarButton( _, _, _, _, _, _, let navBarBackground):
+            return navBarBackground
+        default:
+            return .clear
         }
     }
 }

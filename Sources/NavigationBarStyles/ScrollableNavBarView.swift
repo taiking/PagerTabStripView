@@ -41,6 +41,7 @@ internal struct ScrollableNavBarView: View {
                 }
             }
         }
+        .background(self.style.navBarBackground)
     }
 
     @Environment(\.pagerStyle) var style: PagerStyle
