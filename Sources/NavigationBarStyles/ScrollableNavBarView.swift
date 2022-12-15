@@ -22,13 +22,13 @@ internal struct ScrollableNavBarView: View {
         if let internalStyle = style as? BarButtonStyle {
             ScrollViewReader { value in
                 ScrollView(.horizontal, showsIndicators: false) {
-                    VStack {
+                    ZStack {
+                        IndicatorScrollableBarView(selection: $selection)
                         HStack(spacing: internalStyle.tabItemSpacing) {
                             ForEach(0..<dataStore.itemsCount, id: \.self) { idx in
                                 NavBarItem(id: idx, selection: $selection)
                             }
                         }
-                        IndicatorScrollableBarView(selection: $selection)
                     }
                     .frame(height: internalStyle.tabItemHeight)
                 }
@@ -55,6 +55,7 @@ internal struct ScrollableNavBarView: View {
             .onAppear {
                 switchAppeared = !switchAppeared
             }
+            .background(internalStyle.navBarBackground)
         }
     }
 

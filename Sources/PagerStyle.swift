@@ -33,8 +33,8 @@ extension PagerStyle where Self == SegmentedControlStyle {
 }
 
 extension PagerStyle where Self == BarButtonStyle {
-    public static func scrollableBarButton(placedInToolbar: Bool = false, pagerAnimation: Animation = .default, tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 50, padding: EdgeInsets = EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10), indicatorViewHeight: CGFloat = 2, @ViewBuilder barBackgroundView: @escaping () -> some View = { EmptyView() }, @ViewBuilder indicatorView: @escaping () -> some View = { Rectangle().fill(.blue) }) -> BarButtonStyle {
-        return BarButtonStyle(placedInToolbar: placedInToolbar, pagerAnimation: pagerAnimation, tabItemSpacing: tabItemSpacing, tabItemHeight: tabItemHeight, scrollable: true, padding: padding, indicatorViewHeight: indicatorViewHeight, barBackgroundView: { AnyView(barBackgroundView()) }, indicatorView: { AnyView(indicatorView()) })
+    public static func scrollableBarButton(placedInToolbar: Bool = false, pagerAnimation: Animation = .default, tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 50, padding: EdgeInsets = EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10), indicatorViewHeight: CGFloat = 2, navBarBackground: Color = .clear, @ViewBuilder barBackgroundView: @escaping () -> some View = { EmptyView() }, @ViewBuilder indicatorView: @escaping () -> some View = { Rectangle().fill(.blue) }) -> BarButtonStyle {
+        return BarButtonStyle(placedInToolbar: placedInToolbar, pagerAnimation: pagerAnimation, tabItemSpacing: tabItemSpacing, tabItemHeight: tabItemHeight, scrollable: true, padding: padding, indicatorViewHeight: indicatorViewHeight, navBarBackground: navBarBackground, barBackgroundView: { AnyView(barBackgroundView()) }, indicatorView: { AnyView(indicatorView()) })
     }
 
     public static func barButton(placedInToolbar: Bool = false, pagerAnimation: Animation = .default, tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 50, padding: EdgeInsets = EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10), indicatorViewHeight: CGFloat = 2, @ViewBuilder barBackgroundView: @escaping () -> some View = { EmptyView() }, @ViewBuilder indicatorView: @escaping () -> some View = { Rectangle().fill(.blue) }) -> BarButtonStyle {
@@ -84,11 +84,12 @@ public struct BarButtonStyle: PagerWithIndicatorStyle {
     public var scrollable: Bool
     public var padding: EdgeInsets
     public var indicatorViewHeight: CGFloat
+    public var navBarBackground: Color
 
     @ViewBuilder public var indicatorView: () -> AnyView
     @ViewBuilder public var barBackgroundView: () -> AnyView
 
-    public init(placedInToolbar: Bool = false, pagerAnimation: Animation = .default, tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 50, scrollable: Bool = false, padding: EdgeInsets = EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10), indicatorViewHeight: CGFloat = 2, @ViewBuilder barBackgroundView: @escaping (() -> AnyView) = { AnyView(EmptyView()) }, @ViewBuilder indicatorView: @escaping (() -> AnyView) = { AnyView(Rectangle().fill(.blue)) }) {
+    public init(placedInToolbar: Bool = false, pagerAnimation: Animation = .default, tabItemSpacing: CGFloat = 0, tabItemHeight: CGFloat = 50, scrollable: Bool = false, padding: EdgeInsets = EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10), indicatorViewHeight: CGFloat = 2, navBarBackground: Color = .clear, @ViewBuilder barBackgroundView: @escaping (() -> AnyView) = { AnyView(EmptyView()) }, @ViewBuilder indicatorView: @escaping (() -> AnyView) = { AnyView(Rectangle().fill(.blue)) }) {
         self.placedInToolbar = placedInToolbar
         self.pagerAnimation = pagerAnimation
         self.tabItemSpacing = tabItemSpacing
@@ -98,7 +99,7 @@ public struct BarButtonStyle: PagerWithIndicatorStyle {
         self.indicatorView = indicatorView
         self.barBackgroundView = barBackgroundView
         self.indicatorViewHeight = indicatorViewHeight
-
+        self.navBarBackground = navBarBackground
     }
 }
 
